@@ -1,0 +1,29 @@
+ext.displayName = "Spock Framework - Integration Specs for Mocking"
+
+description = "Integration Specs for Mocking"
+
+configurations {
+  cglib
+  bytebuddy
+}
+
+dependencies {
+  testCompile(project(":spock-core")) {
+    exclude group: "cglib"
+    exclude group: "net.bytebuddy"
+  }
+  cglib libs.cglib
+  bytebuddy libs.bytebuddy
+}
+
+task testCglib(type: Test) {
+  systemProperty("org.spockframework.mock.testType", "cglib")
+  classpath += configurations.cglib
+}
+
+task testByteBuddy(type: Test) {
+  systemProperty("org.spockframework.mock.testType", "byte-buddy")
+  classpath += configurations.bytebuddy
+}
+
+check.dependsOn(tasks.withType(Test))
